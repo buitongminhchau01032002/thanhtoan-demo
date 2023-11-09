@@ -1,29 +1,50 @@
 import { useState } from "react";
-import * as Yup from "yup";
 import clsx from "clsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import PasswordStrengthBar from "react-password-strength-bar";
 
-const validationSchema = Yup.object({
-    username: Yup.string().required("Vui lòng nhập tên tài khoản!"),
-    phone: Yup.string().required("Vui lòng nhập số điện thoại!"),
-    address: Yup.string().required("Vui lòng nhập địa chỉ!"),
-    password: Yup.string()
-        .required("Vui lòng nhập nhập mật khẩu!")
-        .min(6, "Mật khẩu quá ngắn! mật khẩu phải có ít nhất 6 kí tự"),
-    confirmPassword: Yup.string()
-        .required("Vui lòng nhập nhập lại mật khẩu!")
-        .oneOf([Yup.ref("password"), null], "Nhập lại mật khẩu không đúng"),
-});
-
 function SignUp() {
     const [loading, setLoading] = useState(false);
 
     const showSuccessNoti = () => toast.success("Thêm thành công!");
     const showErorrNoti = () => toast.error("Có lỗi xảy ra!");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [progress, setProgress] = useState("");
+    const [hidePassword, setHidePassword] = useState(true);
+    const handlePassword = (passwordValue) => {
+        const strengthChecks = {
+            length: 0,
+            hasUpperCase: false,
+            hasLowerCase: false,
+            hasDigit: false,
+            hasSpecialChar: false,
+        };
 
+        strengthChecks.length = passwordValue.length >= 8 ? true : false;
+        strengthChecks.hasUpperCase = /[A-Z]+/.test(passwordValue);
+        strengthChecks.hasLowerCase = /[a-z]+/.test(passwordValue);
+        strengthChecks.hasDigit = /[0-9]+/.test(passwordValue);
+        strengthChecks.hasSpecialChar = /[^A-Za-z0-9]+/.test(passwordValue);
+
+        let verifiedList = Object.values(strengthChecks).filter((value) => value);
+
+        let strength = verifiedList.length == 5 ? "Strong" : verifiedList.length >= 2 ? "Medium" : "Weak";
+
+        setPassword(passwordValue);
+        setProgress(`${(verifiedList.length / 5) * 100}%`);
+        setMessage(strength);
+
+        console.log("verifiedList: ", `${(verifiedList.length / 5) * 100}%`);
+    };
+
+    const getActiveColor = (type) => {
+        if (type === "Strong") return "#8BC926";
+        if (type === "Medium") return "#FEBD01";
+        return "#FF0054";
+    };
     const form = useFormik({
         initialValues: {
             name: "",
@@ -31,7 +52,6 @@ function SignUp() {
             password: "",
             confirmPassword: "",
         },
-        validationSchema,
         onSubmit: handleFormsubmit,
     });
     //
@@ -75,7 +95,6 @@ function SignUp() {
                         <div className=" w-[600px] rounded-[24px]  justify-center gap-4 flex  z-10  justify items-center  border border-white shadow-[0_4px_40px_0px_rgba(59,130,246,0.20)] px-9 py-[50px]">
                             <div className="space-y-4 p-8 w-[400px]">
                                 <h1 className="text-center text-2xl font-semibold text-gray-900">Đăng ký tài khoản</h1>
-
                                 <form onSubmit={form.handleSubmit}>
                                     <div className="flex flex-col w-full">
                                         <div className="flex w-full">
@@ -137,9 +156,67 @@ function SignUp() {
                                                         {form.errors.phone || "No message"}
                                                     </span>
                                                 </div>
+                                                <div className="container">
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h2 className="title">Password Strength Checker</h2>
+                                                        </div>
 
-                                                <PasswordStrengthBar password={form.values.password} />
+                                                        <div className="card-body">
+                                                            <div className="input-container">
+                                                                <div className="input-box">
+                                                                    <input
+                                                                        value={password}
+                                                                        onChange={({ target }) => {
+                                                                            handlePassword(target.value);
+                                                                        }}
+                                                                        type={hidePassword ? "password" : "text"}
+                                                                        className="input"
+                                                                        placeholder="Enter Password"
+                                                                    />
 
+                                                                    <a
+                                                                        href="#"
+                                                                        className="toggle-btn"
+                                                                        onClick={() => {
+                                                                            setHidePassword(!hidePassword);
+                                                                        }}
+                                                                    >
+                                                                        <span
+                                                                            className="material-icons eye-icon"
+                                                                            style={{
+                                                                                color: !hidePassword
+                                                                                    ? "#FF0054"
+                                                                                    : "#c3c3c3",
+                                                                            }}
+                                                                        >
+                                                                            visibility
+                                                                        </span>
+                                                                    </a>
+                                                                </div>
+
+                                                                <div className="progress-bg">
+                                                                    <div
+                                                                        className="progress"
+                                                                        style={{
+                                                                            width: progress,
+                                                                            backgroundColor: getActiveColor(message),
+                                                                        }}
+                                                                    ></div>
+                                                                </div>
+                                                            </div>
+
+                                                            {password.length !== 0 ? (
+                                                                <p
+                                                                    className="message"
+                                                                    style={{ color: getActiveColor(message) }}
+                                                                >
+                                                                    Your password is {message}
+                                                                </p>
+                                                            ) : null}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div className="mb-2">
                                                     <label
                                                         htmlFor="password"
@@ -158,6 +235,12 @@ function SignUp() {
                                                         className={clsx("text-input w-full py-2", {
                                                             invalid: form.touched.password && form.errors.password,
                                                         })}
+                                                    />
+                                                    <PasswordStrengthBar
+                                                        password={form.values.password}
+                                                        onChangeScore={(score) => {
+                                                            console.log(score);
+                                                        }}
                                                     />
                                                     <span
                                                         className={clsx("text-sm text-red-500 opacity-0", {
