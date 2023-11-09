@@ -1,10 +1,15 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 
 export default function HomePage() {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
+    useEffect(() => {
+        if (!user) {
+            navigate('/signin');
+        }
+    }, [user]);
     function logOut() {
         setUser(null);
         navigate('/signin');

@@ -2,24 +2,27 @@ import { BsFillShieldLockFill, BsTelephoneFill } from 'react-icons/bs';
 import { CgSpinner } from 'react-icons/cg';
 
 import OtpInput from 'otp-input-react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { auth } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { toast, Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../App';
 
-export default function OtpPage({ user }) {
+export default function OtpPage() {
+    const { user, setUser } = useContext(UserContext);
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
 
-    console.log('user', user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!user?.phone) {
             return;
         }
-        //onSignup();
+        onSignup();
     }, [user]);
 
     function onCaptchVerify() {
@@ -44,7 +47,7 @@ export default function OtpPage({ user }) {
 
         const appVerifier = window.recaptchaVerifier;
 
-        signInWithPhoneNumber(auth, phone, appVerifier)
+        signInWithPhoneNumber(auth, user.phone, appVerifier)
             .then((confirmationResult) => {
                 window.confirmationResult = confirmationResult;
                 setLoading(false);
@@ -62,12 +65,13 @@ export default function OtpPage({ user }) {
             .confirm(otp)
             .then(async (res) => {
                 console.log(res);
-                console.log('SUCCESSFUL');
+                toast.success('Successfully!');
+                navigate('/home');
                 setLoading(false);
             })
             .catch((err) => {
-                console.log(err);
-                console.log('FAILURE');
+                toast.error('OTP incorrect');
+                navigate('/home');
                 setLoading(false);
             });
     }
@@ -75,7 +79,6 @@ export default function OtpPage({ user }) {
     return (
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
-                <Toaster toastOptions={{ duration: 4000 }} />
                 <div id="recaptcha-container"></div>
 
                 <div className="w-80 flex flex-col gap-4 rounded-lg p-4">

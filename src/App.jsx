@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import OtpPage from './pages/Otp';
 import SignInPage from './pages/SignIn';
+import { Toaster } from 'react-hot-toast';
 
 export const UserContext = createContext(null);
 
@@ -23,6 +24,7 @@ function App() {
                         <Route path="/signin" element={<SignInPage />} />
                     </Routes>
                 </UserContext.Provider>
+                <Toaster toastOptions={{ duration: 4000 }} />
             </div>
         </Router>
     );

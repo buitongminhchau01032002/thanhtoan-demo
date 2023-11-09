@@ -4,6 +4,7 @@ import PhoneInput from 'react-phone-input-2';
 import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
+import toast from 'react-hot-toast';
 
 export default function SignInPage() {
     const { user, setUser } = useContext(UserContext);
@@ -24,6 +25,8 @@ export default function SignInPage() {
         if (result.length > 0) {
             setUser(result[0].data());
             navigate('/home');
+        } else {
+            toast.error('Login failed');
         }
     }
     return (
