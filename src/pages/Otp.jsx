@@ -8,10 +8,8 @@ import 'react-phone-input-2/lib/style.css';
 import { auth } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { toast, Toaster } from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
-export default function OtpPage() {
-    const { phone } = useParams();
+export default function OtpPage({ phone }) {
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
 

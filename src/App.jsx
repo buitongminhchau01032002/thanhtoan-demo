@@ -8,8 +8,8 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/home" element={<HomePage />} />
-                    <Route path="/otp/:phone" element={<OtpPage />} />
+                    <Route path="/home" element={<HomePage user="+84123456789" />} />
+                    <Route path="/otp" element={<OtpPage phone="+84123456789" />} />
                 </Routes>
             </div>
         </Router>
