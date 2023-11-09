@@ -8,13 +8,22 @@ import { getFirestore } from 'firebase/firestore';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // Your web app's Firebase configuration
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyCWIVAJpJBB-FI-FmTFmuSyUtBCmBFNQyE',
+//     authDomain: 'otp-test-77523.firebaseapp.com',
+//     projectId: 'otp-test-77523',
+//     storageBucket: 'otp-test-77523.appspot.com',
+//     messagingSenderId: '294866841676',
+//     appId: '1:294866841676:web:0105b3db806e4cec6844e9',
+// };
+
 const firebaseConfig = {
-    apiKey: 'AIzaSyCWIVAJpJBB-FI-FmTFmuSyUtBCmBFNQyE',
-    authDomain: 'otp-test-77523.firebaseapp.com',
-    projectId: 'otp-test-77523',
-    storageBucket: 'otp-test-77523.appspot.com',
-    messagingSenderId: '294866841676',
-    appId: '1:294866841676:web:0105b3db806e4cec6844e9',
+    apiKey: 'AIzaSyCUE2muTrmDnFuAbqWK_fqX26D80nqPtkE',
+    authDomain: 'otp-test2.firebaseapp.com',
+    projectId: 'otp-test2',
+    storageBucket: 'otp-test2.appspot.com',
+    messagingSenderId: '382101218860',
+    appId: '1:382101218860:web:0ed99040e58e9618cd5389',
 };
 
 // Initialize Firebase
