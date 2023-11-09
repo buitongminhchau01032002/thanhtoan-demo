@@ -23,5 +23,3 @@ export default function HomePage({ user }) {
         </section>
     );
 }
-
-export default SignUp;
