@@ -1,18 +1,25 @@
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../App';
 
-export default function HomePage({ user, setUser }) {
-    console.log('user', user);
+export default function HomePage() {
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+    function logOut() {
+        setUser(null);
+        navigate('/signin');
+    }
 
     return (
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
                 <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
-                    <label htmlFor="otp" className="font-bold text-4xl text-white text-center">
+                    <div htmlFor="otp" className="font-bold text-4xl text-white text-center">
                         Wellcome!
-                    </label>
-                    <label htmlFor="otp" className="font-bold text-xl text-white text-center">
+                    </div>
+                    <div htmlFor="otp" className="font-bold text-xl text-white text-center">
                         {user?.phone}
-                    </label>
+                    </div>
 
                     <Link
                         to={'/otp'}
@@ -20,6 +27,12 @@ export default function HomePage({ user, setUser }) {
                     >
                         <span>Make a transaction</span>
                     </Link>
+                    <button
+                        onClick={logOut}
+                        className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
+                    >
+                        Logout
+                    </button>
                 </div>
             </div>
         </section>

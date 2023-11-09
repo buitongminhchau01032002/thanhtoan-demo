@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import OtpPage from './pages/Otp';
+import SignInPage from './pages/SignIn';
+
+export const UserContext = createContext(null);
 
 function App() {
     const [user, setUser] = useState(null);
@@ -9,13 +12,17 @@ function App() {
     //     phone: '+84123456789',
     //     password: 'fsadf3rwf3'
     // }
+    console.log('user: ', user);
     return (
         <Router>
             <div className="App">
-                <Routes>
-                    <Route path="/home" element={<HomePage user={user} setUser={setUser} />} />
-                    <Route path="/otp" element={<OtpPage user={user} />} />
-                </Routes>
+                <UserContext.Provider value={{ user: user, setUser: setUser }}>
+                    <Routes>
+                        <Route path="/home" element={<HomePage />} />
+                        <Route path="/otp" element={<OtpPage />} />
+                        <Route path="/signin" element={<SignInPage />} />
+                    </Routes>
+                </UserContext.Provider>
             </div>
         </Router>
     );
