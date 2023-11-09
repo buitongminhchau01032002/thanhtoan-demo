@@ -20,6 +20,7 @@ export default function OtpPage() {
 
     useEffect(() => {
         if (!user?.phone) {
+            navigate('/home');
             return;
         }
         onSignup();
@@ -31,9 +32,7 @@ export default function OtpPage() {
                 'recaptcha-container',
                 {
                     size: 'invisible',
-                    callback: (response) => {
-                        onSignup();
-                    },
+                    callback: (response) => {},
                     'expired-callback': () => {},
                 },
                 auth
@@ -46,6 +45,7 @@ export default function OtpPage() {
         onCaptchVerify();
 
         const appVerifier = window.recaptchaVerifier;
+        console.log(appVerifier);
 
         signInWithPhoneNumber(auth, user.phone, appVerifier)
             .then((confirmationResult) => {
@@ -79,8 +79,6 @@ export default function OtpPage() {
     return (
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
-                <div id="recaptcha-container"></div>
-
                 <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
                     <div className="bg-white text-emerald-500 w-fit mx-auto p-4 rounded-full">
                         <BsFillShieldLockFill size={30} />

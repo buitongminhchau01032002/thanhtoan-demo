@@ -33,9 +33,9 @@ export default function SignInPage() {
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
                 <div className="w-[330px] flex flex-col gap-4 rounded-lg p-4">
-                    <label htmlFor="otp" className="font-bold text-4xl text-white text-center">
+                    <div htmlFor="otp" className="font-bold text-4xl text-white text-center">
                         Sign In
-                    </label>
+                    </div>
                     <div className="mt-3">
                         <PhoneInput country={'vn'} value={ph} onChange={setPh} />
                         <input
