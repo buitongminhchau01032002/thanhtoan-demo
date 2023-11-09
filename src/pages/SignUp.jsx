@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 const validationSchema = Yup.object({
     username: Yup.string().required("Vui lòng nhập tên tài khoản!"),
@@ -136,6 +137,9 @@ function SignUp() {
                                                         {form.errors.phone || "No message"}
                                                     </span>
                                                 </div>
+
+                                                <PasswordStrengthBar password={form.values.password} />
+
                                                 <div className="mb-2">
                                                     <label
                                                         htmlFor="password"

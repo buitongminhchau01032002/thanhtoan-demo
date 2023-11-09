@@ -1,39 +1,40 @@
-import { BsFillShieldLockFill, BsTelephoneFill } from 'react-icons/bs';
-import { CgSpinner } from 'react-icons/cg';
+import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
+import { CgSpinner } from "react-icons/cg";
 
-import OtpInput from 'otp-input-react';
-import { useContext, useEffect, useState } from 'react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import { auth } from '../firebase';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { toast, Toaster } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../App';
+import OtpInput from "otp-input-react";
+import { useContext, useEffect, useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { auth } from "../firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 export default function OtpPage() {
     const { user, setUser } = useContext(UserContext);
-    const [otp, setOtp] = useState('');
+    const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!user?.phone) {
-            navigate('/home');
+            navigate("/home");
             return;
         }
+        console.log("sigup1");
         onSignup();
     }, [user]);
 
     function onCaptchVerify() {
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new RecaptchaVerifier(
-                'recaptcha-container',
+                "recaptcha-container",
                 {
-                    size: 'invisible',
+                    size: "invisible",
                     callback: (response) => {},
-                    'expired-callback': () => {},
+                    "expired-callback": () => {},
                 },
                 auth
             );
@@ -43,7 +44,7 @@ export default function OtpPage() {
     function onSignup() {
         setLoading(true);
         onCaptchVerify();
-
+        console.log("onsigntup");
         const appVerifier = window.recaptchaVerifier;
         console.log(appVerifier);
 
@@ -51,7 +52,7 @@ export default function OtpPage() {
             .then((confirmationResult) => {
                 window.confirmationResult = confirmationResult;
                 setLoading(false);
-                toast.success('OTP sended successfully!');
+                toast.success("OTP sended successfully!");
             })
             .catch((error) => {
                 console.log(error);
@@ -65,13 +66,13 @@ export default function OtpPage() {
             .confirm(otp)
             .then(async (res) => {
                 console.log(res);
-                toast.success('Successfully!');
-                navigate('/home');
+                toast.success("Successfully!");
+                navigate("/home");
                 setLoading(false);
             })
             .catch((err) => {
-                toast.error('OTP incorrect');
-                navigate('/home');
+                toast.error("OTP incorrect");
+                navigate("/home");
                 setLoading(false);
             });
     }
