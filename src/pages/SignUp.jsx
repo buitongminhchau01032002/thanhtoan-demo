@@ -71,7 +71,7 @@ function SignUp() {
                 <ToastContainer hideProgressBar />
                 <section className=" ">
                     <div className=" mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-                        <div className=" w-[600px] rounded-lg  justify-center gap-4 flex shadow-2xl">
+                        <div className=" w-[600px] rounded-[24px]  justify-center gap-4 flex  z-10  justify items-center  border border-white shadow-[0_4px_40px_0px_rgba(59,130,246,0.20)] px-9 py-[50px]">
                             <div className="space-y-4 p-8 w-[400px]">
                                 <h1 className="text-center text-2xl font-semibold text-gray-900">Đăng ký tài khoản</h1>
 

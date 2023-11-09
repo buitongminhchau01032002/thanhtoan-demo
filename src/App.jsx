@@ -1,8 +1,8 @@
-import { createContext, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/Home';
-import OtpPage from './pages/Otp';
-import SignInPage from './pages/SignIn';
+import { createContext, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/Home";
+import OtpPage from "./pages/Otp";
+import SignInPage from "./pages/SignIn";
 
 export const UserContext = createContext(null);
 
@@ -12,7 +12,7 @@ function App() {
     //     phone: '+84123456789',
     //     password: 'fsadf3rwf3'
     // }
-    console.log('user: ', user);
+    console.log("user: ", user);
     return (
         <Router>
             <div className="App">
