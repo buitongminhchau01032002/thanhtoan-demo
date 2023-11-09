@@ -4,6 +4,7 @@ import HomePage from './pages/Home';
 import OtpPage from './pages/Otp';
 import SignInPage from './pages/SignIn';
 import { Toaster } from 'react-hot-toast';
+import SignUp from './pages/SignUp';
 
 export const UserContext = createContext(null);
 
@@ -22,6 +23,7 @@ function App() {
                         <Route path="/home" element={<HomePage />} />
                         <Route path="/otp" element={<OtpPage />} />
                         <Route path="/signin" element={<SignInPage />} />
+                        <Route path="/signup" element={<SignUp />} />
                     </Routes>
                 </UserContext.Provider>
                 <Toaster toastOptions={{ duration: 4000 }} />
