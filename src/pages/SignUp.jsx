@@ -1,16 +1,17 @@
 import { useState } from "react";
-import clsx from "clsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useFormik } from "formik";
-import PasswordStrengthBar from "react-password-strength-bar";
+import PhoneInput from "react-phone-input-2";
 
 function SignUp() {
     const [loading, setLoading] = useState(false);
 
     const showSuccessNoti = () => toast.success("Thêm thành công!");
     const showErorrNoti = () => toast.error("Có lỗi xảy ra!");
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [progress, setProgress] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
@@ -45,46 +46,6 @@ function SignUp() {
         if (type === "Medium") return "#FEBD01";
         return "#FF0054";
     };
-    const form = useFormik({
-        initialValues: {
-            name: "",
-            phone: "",
-            password: "",
-            confirmPassword: "",
-        },
-        onSubmit: handleFormsubmit,
-    });
-    //
-
-    function handleFormsubmit(values) {
-        setLoading(true);
-        fetch("http://localhost:5000/api/account", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-        })
-            .then((res) => res.json())
-            .then((resJson) => {
-                if (resJson.success) {
-                    setLoading(false);
-                    showSuccessNoti();
-                    form.resetForm();
-                    form.values.confirmPassword = "";
-                } else {
-                    setLoading(false);
-                    console.log(values);
-                    showErorrNoti();
-                }
-            })
-            .catch(() => {
-                setLoading(false);
-                console.log(values);
-                showErorrNoti();
-            });
-    }
-    //
 
     return (
         <>
@@ -95,7 +56,11 @@ function SignUp() {
                         <div className=" w-[600px] rounded-[24px]  justify-center gap-4 flex  z-10  justify items-center  border border-white shadow-[0_4px_40px_0px_rgba(59,130,246,0.20)] px-9 py-[50px]">
                             <div className="space-y-4 p-8 w-[400px]">
                                 <h1 className="text-center text-2xl font-semibold text-gray-900">Đăng ký tài khoản</h1>
-                                <form onSubmit={form.handleSubmit}>
+                                <form
+                                    onSubmit={() => {
+                                        console.log("submit");
+                                    }}
+                                >
                                     <div className="flex flex-col w-full">
                                         <div className="flex w-full">
                                             <div className="flex flex-col w-full justify-between">
@@ -107,24 +72,13 @@ function SignUp() {
                                                         type="text"
                                                         name="name"
                                                         id="name"
-                                                        className={clsx(
-                                                            "focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300  p-2.5 pr-0 text-gray-900    sm:text-sm",
-                                                            {
-                                                                invalid: form.touched.name && form.errors.name,
-                                                            }
-                                                        )}
-                                                        onChange={form.handleChange}
-                                                        onBlur={form.handleBlur}
-                                                        value={form.values.name}
+                                                        className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300  p-2.5 pr-0 text-gray-900    sm:text-sm"
+                                                        value={name}
+                                                        onChange={({ target }) => {
+                                                            setName(target.value);
+                                                        }}
                                                         placeholder="Tên người dùng"
                                                     />
-                                                    <span
-                                                        className={clsx("text-sm text-red-500 opacity-0", {
-                                                            "opacity-100": form.touched.name && form.errors.name,
-                                                        })}
-                                                    >
-                                                        {form.errors.name || "No message"}
-                                                    </span>
                                                 </div>
                                                 <div className="mb-2">
                                                     <label
@@ -133,89 +87,7 @@ function SignUp() {
                                                     >
                                                         Số điện thoại
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        name="phone"
-                                                        id="phone"
-                                                        className={clsx(
-                                                            "focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300  p-2.5 pr-0 text-gray-900    sm:text-sm",
-                                                            {
-                                                                invalid: form.touched.phone && form.errors.phone,
-                                                            }
-                                                        )}
-                                                        onChange={form.handleChange}
-                                                        onBlur={form.handleBlur}
-                                                        value={form.values.phone}
-                                                        placeholder="Số điện thoại"
-                                                    />
-                                                    <span
-                                                        className={clsx("text-sm text-red-500 opacity-0", {
-                                                            "opacity-100": form.touched.phone && form.errors.phone,
-                                                        })}
-                                                    >
-                                                        {form.errors.phone || "No message"}
-                                                    </span>
-                                                </div>
-                                                <div className="container">
-                                                    <div className="card">
-                                                        <div className="card-header">
-                                                            <h2 className="title">Password Strength Checker</h2>
-                                                        </div>
-
-                                                        <div className="card-body">
-                                                            <div className="input-container">
-                                                                <div className="input-box">
-                                                                    <input
-                                                                        value={password}
-                                                                        onChange={({ target }) => {
-                                                                            handlePassword(target.value);
-                                                                        }}
-                                                                        type={hidePassword ? "password" : "text"}
-                                                                        className="input"
-                                                                        placeholder="Enter Password"
-                                                                    />
-
-                                                                    <a
-                                                                        href="#"
-                                                                        className="toggle-btn"
-                                                                        onClick={() => {
-                                                                            setHidePassword(!hidePassword);
-                                                                        }}
-                                                                    >
-                                                                        <span
-                                                                            className="material-icons eye-icon"
-                                                                            style={{
-                                                                                color: !hidePassword
-                                                                                    ? "#FF0054"
-                                                                                    : "#c3c3c3",
-                                                                            }}
-                                                                        >
-                                                                            visibility
-                                                                        </span>
-                                                                    </a>
-                                                                </div>
-
-                                                                <div className="progress-bg">
-                                                                    <div
-                                                                        className="progress"
-                                                                        style={{
-                                                                            width: progress,
-                                                                            backgroundColor: getActiveColor(message),
-                                                                        }}
-                                                                    ></div>
-                                                                </div>
-                                                            </div>
-
-                                                            {password.length !== 0 ? (
-                                                                <p
-                                                                    className="message"
-                                                                    style={{ color: getActiveColor(message) }}
-                                                                >
-                                                                    Your password is {message}
-                                                                </p>
-                                                            ) : null}
-                                                        </div>
-                                                    </div>
+                                                    <PhoneInput country={"vn"} value={phone} onChange={setPhone} />
                                                 </div>
                                                 <div className="mb-2">
                                                     <label
@@ -228,28 +100,30 @@ function SignUp() {
                                                         type="password"
                                                         name="password"
                                                         id="password"
-                                                        onChange={form.handleChange}
-                                                        onBlur={form.handleBlur}
-                                                        value={form.values.password}
-                                                        placeholder="Nhập mật khẩu của bạn"
-                                                        className={clsx("text-input w-full py-2", {
-                                                            invalid: form.touched.password && form.errors.password,
-                                                        })}
-                                                    />
-                                                    <PasswordStrengthBar
-                                                        password={form.values.password}
-                                                        onChangeScore={(score) => {
-                                                            console.log(score);
+                                                        value={password}
+                                                        onChange={({ target }) => {
+                                                            handlePassword(target.value);
                                                         }}
+                                                        placeholder="Nhập mật khẩu của bạn"
+                                                        className="text-input w-full py-2"
                                                     />
-                                                    <span
-                                                        className={clsx("text-sm text-red-500 opacity-0", {
-                                                            "opacity-100":
-                                                                form.touched.password && form.errors.password,
-                                                        })}
-                                                    >
-                                                        {form.errors.password || "No message"}
-                                                    </span>
+                                                    <div className="progress-bg">
+                                                        <div
+                                                            className="progress"
+                                                            style={{
+                                                                width: progress,
+                                                                backgroundColor: getActiveColor(message),
+                                                            }}
+                                                        ></div>
+                                                    </div>
+                                                    {password.length !== 0 ? (
+                                                        <p
+                                                            className="message"
+                                                            style={{ color: getActiveColor(message) }}
+                                                        >
+                                                            Your password is {message}
+                                                        </p>
+                                                    ) : null}
                                                 </div>
                                                 <div className="mb-2">
                                                     <label
@@ -262,25 +136,13 @@ function SignUp() {
                                                         type="password"
                                                         name="confirmPassword"
                                                         id="confirmPassword"
-                                                        onChange={form.handleChange}
-                                                        onBlur={form.handleBlur}
-                                                        value={form.values.confirmPassword}
+                                                        value={confirmPassword}
+                                                        onChange={({ target }) => {
+                                                            setConfirmPassword(target.value);
+                                                        }}
                                                         placeholder="Nhập lại mật khẩu của bạn"
-                                                        className={clsx("text-input w-full py-2", {
-                                                            invalid:
-                                                                form.touched.confirmPassword &&
-                                                                form.errors.confirmPassword,
-                                                        })}
+                                                        className="text-input w-full py-2"
                                                     />
-                                                    <span
-                                                        className={clsx("text-sm text-red-500 opacity-0", {
-                                                            "opacity-100":
-                                                                form.touched.confirmPassword &&
-                                                                form.errors.confirmPassword,
-                                                        })}
-                                                    >
-                                                        {form.errors.confirmPassword || "No message"}
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -289,7 +151,7 @@ function SignUp() {
                                     <button
                                         type="submit"
                                         className="btn btn-blue btn-md mt-4 w-full"
-                                        disabled={!form.dirty || loading}
+                                        disabled={loading}
                                     >
                                         {!loading ? (
                                             <span>Đăng ký</span>
