@@ -9,16 +9,18 @@ import { auth } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { toast, Toaster } from 'react-hot-toast';
 
-export default function OtpPage({ phone }) {
+export default function OtpPage({ user }) {
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
 
+    console.log('user', user);
+
     useEffect(() => {
-        if (!phone) {
+        if (!user?.phone) {
             return;
         }
         //onSignup();
-    }, [phone]);
+    }, [user]);
 
     function onCaptchVerify() {
         if (!window.recaptchaVerifier) {

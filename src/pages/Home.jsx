@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
-export default function HomePage({ user }) {
+export default function HomePage({ user, setUser }) {
+    console.log('user', user);
+
     return (
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
@@ -9,7 +11,7 @@ export default function HomePage({ user }) {
                         Wellcome!
                     </label>
                     <label htmlFor="otp" className="font-bold text-xl text-white text-center">
-                        {user}
+                        {user?.phone}
                     </label>
 
                     <Link
